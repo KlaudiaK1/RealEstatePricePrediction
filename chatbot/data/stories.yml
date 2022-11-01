@@ -1,0 +1,105 @@
+version: "2.0"
+
+stories:
+
+# - story: estimate_flat_price
+#   steps:
+#   - intent: greet
+#   - action: utter_greet
+#   - intent: pricing_request
+#   - action: pricing_form
+#   - active_loop: pricing_form
+#   - slot_was_set:
+#     - localisation: krakow
+#     - area: 45
+#   - active_loop: null
+#   - action: action_print_information
+
+  - story: flat pricing form continue
+    steps: 
+      - intent: greet
+      - action: utter_greet
+      - action: utter_ask_property_type
+      - intent: flat_pricing_request
+      - action: flat_pricing_form
+      - active_loop: flat_pricing_form
+      - slot_was_set:
+        - requested_slot: localisation
+      - intent: chitchat
+      - action: utter_ask_continue
+      - intent: affirm
+      - action: flat_pricing_form
+
+  - story: flat pricing form stop
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - action: utter_ask_property_type
+      - intent: flat_pricing_request
+      - action: flat_pricing_form
+      - active_loop: flat_pricing_form
+      - slot_was_set:
+        - requested_slot: localisation
+      - intent: chitchat
+      - action: utter_ask_continue
+      - intent: deny
+      - action: action_deactivate_loop
+      - active_loop: null
+      - action: action_restart
+
+  - story: flat pricing story
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - action: utter_ask_property_type
+      - intent: flat_pricing_request
+      - action: flat_pricing_form
+      - active_loop: flat_pricing_form
+      - slot_was_set:
+        - requested_slot: localisation
+      - intent: chitchat
+      - action: utter_ask_continue
+      - intent: affirm
+      - action: flat_pricing_form
+      - slot_was_set:
+        - requested_slot: area
+      - intent: chitchat
+      - action: utter_ask_continue
+      - intent: affirm
+      - action: flat_pricing_form
+      - slot_was_set:
+        - requested_slot: number_of_rooms
+      - slot_was_set:
+        - requested_slot: finishing_standard
+      - slot_was_set:
+        - requested_slot: floor
+      - slot_was_set:
+        - requested_slot: height
+      - slot_was_set:
+        - requested_slot: rent
+      - slot_was_set:
+        - requested_slot: construction_year
+      - slot_was_set:
+        - requested_slot: heating_type
+      - active_loop: null
+      - action: utter_finished
+      - action: submit_newsletter_form
+      - action: action_restart
+
+  - story: flat pricing story 2
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - action: utter_ask_property_type
+      - intent: flat_pricing_request
+      - action: flat_pricing_form
+      - active_loop: flat_pricing_form
+      - active_loop: null
+      - action: utter_finished
+      - action: submit_newsletter_form
+      - action: action_restart
+
+  - story: finish flow
+    steps:
+      - intent: goodbye
+      - action: utter_goodbye

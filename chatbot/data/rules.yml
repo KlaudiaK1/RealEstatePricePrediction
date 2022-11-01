@@ -1,0 +1,29 @@
+version: "2.0"
+
+rules:
+  - rule: Say goodbye anytime the user says goodbye
+    steps:
+    - intent: goodbye
+    - action: utter_goodbye
+
+  - rule: activate flatform 
+    steps:
+      - intent: flat_pricing_request
+      - action: flat_pricing_form
+      - active_loop: flat_pricing_form
+
+  # - rule: activate flat form 
+  #   steps:
+  #     - intent: flat_pricing_request
+  #     - action: house_pricing_form
+  #     - active_loop: house_pricing_form
+
+  - rule: submit flat form
+    condition:
+      - active_loop: flat_pricing_form
+    steps:
+      - action: flat_pricing_form
+      - active_loop: null
+      - action: utter_finished
+      - action: submit_newsletter_form
+      - action: action_restart

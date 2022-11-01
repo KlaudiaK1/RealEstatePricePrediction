@@ -1,0 +1,286 @@
+version: "2.0"
+
+# intents:
+#   - greet
+#   - goodbye
+#   - affirm
+#   - deny
+#   - pricing_request
+#   - localisation_response
+#   - area_response
+
+# responses:
+#   utter_greet:
+#   - text: "Hey! How are you?"
+
+#   utter_goodbye:
+#   - text: "Bye"
+
+#   utter_ask_localisation:
+#   - text: "Tell me what's the locatisation of your real estate?"
+
+#   utter_ask_area:
+#   - text: "What's the area of the property?"
+
+#   utter_ask_number_of_rooms:
+#   - text: "How many rooms are there?"
+
+#   utter_ask_floor:
+#   - text: "On which floor is your flat located?"
+
+# forms:
+#   pricing_form:
+#     required_slots:
+#       localisation: 
+#       - type: from_entity
+#         entity: localisation
+#         intent: localisation_response
+#       area: 
+#       - type: from_entity
+#         entity: area
+#         intent: area_response
+
+# actions:
+#   - action_print_information
+
+# slots:
+#   localisation: 
+#     type: text
+#   area:
+#     type: text
+
+# entities:
+#   - localisation
+#   - area
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
+
+intents:
+  - greet
+  - chitchat
+  - affirm
+  - deny
+  - goodbye
+  - localisation_response
+  - house_pricing_request
+  - flat_pricing_request
+  - number_of_rooms_response
+  - area_response
+  - finishing_standard_response
+  - floor_response
+  - height_response
+  - rent_response
+  - construction_year_response
+  - heating_type_response
+  - balcony_terrace_garden_response
+
+responses:
+  utter_greet:
+    - text: Hey! I'm here to help you estimate the price of any real estate you want.
+  utter_ask_property_type:
+    - text: Would you like to ask about the price of a flat or a house?
+      buttons:
+        - title: house
+          payload: Could you estimate the price of my house?
+        - title: flat
+          payload: Could you estimate the price of my flat?
+  utter_happy:
+    - text: Great, carry on!
+  utter_ask_localisation:
+    - text: Tell me what's the locatisation of your real estate?
+  utter_ask_area:
+    - text: What's the area of the property?
+  utter_ask_number_of_rooms:
+    - text: How many rooms are there?
+  utter_ask_finishing_standard:
+    - text: What is the finishing standard?
+  utter_ask_floor:
+    - text: On which floor is the flat located?
+  utter_ask_height:
+    - text: And how many floors in total has the building?
+  utter_ask_rent:
+    - text: How much is the monthly rent?
+  utter_ask_construction_year:
+    - text: What is the construction year of the building?
+  utter_ask_heating_type:
+    - text: What about a heating type?
+  utter_ask_market:
+    - text: Is the property in a primary or secondary market?
+  utter_ask_building_type:
+    - text: What is the type of the building?
+  utter_ask_balcony_terrace_garden:
+    - text: What kind of outdoor space does it have (balcony, terrace or garden)?
+  utter_ask_is_parking:
+    - text: Is there a parking?
+  utter_ask_is_furnished:
+    - text: Is the apartment furnished?
+  utter_ask_is_lift:
+    - text: Is there a lift?
+  utter_ask_is_security:
+    - text: Is there any security such as alarms or security door?
+  utter_ask_is_basement:
+    - text: Is there a basement available for residents?
+  utter_ask_is_duplex:
+    - text: Is it a duplex apartment?
+  utter_finished:
+    - text: You're all set! Check your inbox at.
+  utter_ask_continue:
+    - text: Sorry, I don't quite understand. Do you want to continue?
+  utter_goodbye:
+    - text: Bye
+
+forms:
+  flat_pricing_form:
+    localisation:
+      - type: from_entity
+        entity: localisation
+    area:
+      - type: from_text
+    number_of_rooms:
+      - type: from_text
+    finishing_standard:
+      - type: from_entity
+        entity: finishing_standard
+    floor:
+      - type: from_text
+    height:
+      - type: from_text
+    rent:
+      - type: from_text
+    construction_year:
+      - type: from_text
+    heating_type:
+      - type: from_entity
+        entity: heating_type
+    balcony_terrace_garden:
+      - type: from_entity
+        entity: balcony_terrace_garden
+    is_parking:
+      - type: from_intent
+        intent: affirm
+        value: true
+      - type: from_intent
+        intent: deny
+        value: false
+    is_furnished:
+      - type: from_intent
+        intent: affirm
+        value: true
+      - type: from_intent
+        intent: deny
+        value: false
+    is_lift:
+      - type: from_intent
+        intent: affirm
+        value: true
+      - type: from_intent
+        intent: deny
+        value: false
+    is_security:
+      - type: from_intent
+        intent: affirm
+        value: true
+      - type: from_intent
+        intent: deny
+        value: false
+    is_basement:
+      - type: from_intent
+        intent: affirm
+        value: true
+      - type: from_intent
+        intent: deny
+        value: false
+    is_duplex:
+      - type: from_intent
+        intent: affirm
+        value: true
+      - type: from_intent
+        intent: deny
+        value: false
+
+slots:
+  localisation:
+    type: text
+    influence_conversation: false
+  area:
+    type: float
+    influence_conversation: false
+  number_of_rooms:
+    type: float
+    influence_conversation: false
+  finishing_standard:
+    type: categorical
+    influence_conversation: false
+    values:
+      - to renovate
+      - ready to move in
+      - shell condition
+  floor:
+    type: float
+    influence_conversation: false
+  height:
+    type: float
+    influence_conversation: false
+  rent:
+    type: float
+    influence_conversation: false
+  construction_year:
+    type: float
+    influence_conversation: false
+  heating_type:
+    type: categorical
+    influence_conversation: false
+    values:
+      - gas
+      - electric
+      - tiled stove
+      - urban heating
+  balcony_terrace_garden:
+    type: categorical
+    influence_conversation: false
+    values:
+      - balcony
+      - terrace
+      - garden
+  is_parking:
+    type: bool
+    influence_conversation: false
+  is_furnished:
+    type: bool
+    influence_conversation: false
+  is_lift:
+    type: bool
+    influence_conversation: false
+  is_security:
+    type: bool
+    influence_conversation: false
+  is_basement:
+    type: bool
+    influence_conversation: false
+  is_duplex:
+    type: bool
+    influence_conversation: false
+
+entities:
+  - localisation
+  - area
+  - number_of_rooms
+  - finishing_standard
+  - floor
+  - height
+  - rent
+  - construction_year
+  - heating_type
+  - balcony_terrace_garden
+  - is_parking
+  - is_furnished
+  - is_lift
+  - is_security
+  - is_basement
+  - is_duplex
+
+actions:
+  - validate_newsletter_form
+  - submit_newsletter_form
