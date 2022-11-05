@@ -3,52 +3,53 @@ version: "2.0"
 nlu:
 - intent: greet
   examples: |
-    - hey
-    - hello
-    - hi
-    - hello there
-    - good morning
-    - good evening
-    - moin
-    - hey there
-    - let's go
-    - hey dude
-    - goodmorning
-    - goodevening
-    - good afternoon
+    - Hey
+    - Hello
+    - Hi
+    - Hello there
+    - Good morning
+    - Good evening
+    - Moin
+    - Hey there
+    - Let's go
+    - Hey dude
+    - Goodmorning
+    - Goodevening
+    - Good afternoon
 
 - intent: goodbye
   examples: |
-    - good afternoon
-    - cu
-    - good by
-    - cee you later
-    - good night
-    - bye
-    - goodbye
-    - have a nice day
-    - see you around
-    - bye bye
-    - see you later
+    - Good afternoon
+    - Cu
+    - Good by
+    - Cee you later
+    - Good night
+    - Bye
+    - Goodbye
+    - Have a nice day
+    - See you around
+    - Bye bye
+    - See you later
 
 - intent: affirm
   examples: |
-    - yes
-    - y
-    - indeed
-    - of course
-    - that sounds good
-    - correct
+    - Yes
+    - Y
+    - Indeed
+    - Of course
+    - That sounds good
+    - Correct
+    - Sure
 
 - intent: deny
   examples: |
-    - no
-    - n
-    - never
+    - No
+    - N
+    - Never
     - I don't think so
-    - don't like that
-    - no way
-    - not really
+    - Don't like that
+    - No way
+    - Not really
 
 - intent: house_pricing_request
   examples: |
@@ -88,25 +89,8 @@ nlu:
     - [Floriańska 24, Kraków](localisation)
     - Localisation is [Grzegórzki 23, Wrocław](localisation).
     - It is located on [Kwiatowa 4, Gdańsk](localisation).
-
-- intent: area_response
-  examples: |
-    - The flat has [53](area) m2.
-    - [84](area) m2
-    - [32](area) m2
-    - The area is [72](area)
-    - The property has [32](area) m2.
-    - The property has [58](area) squared meters.
-    - [39](area)
-    - [89](area) squared meters
-
-- intent: number_of_rooms_response
-  examples: |
-    - The flat has [2](number_of_rooms) rooms.
-    - [3](number_of_rooms)
-    - [1](number_of_rooms) room
-    - There are [5](number_of_rooms) rooms.
-    - There is only [1](number_of_rooms) room.
+    - [Przemyśl](localisation)
+    - [Rzeszów](localisation)
 
 - intent: finishing_standard_response
   examples: |
@@ -128,40 +112,33 @@ nlu:
     - Ready to [move in]{"entity": "finishing_standard", "value": "ready to move in"}.
     - Ready to [live]{"entity": "finishing_standard", "value": "ready to move in"}.
 
-- intent: floor_response
-  examples: |
-    - The flat is on the [2](floor) floor
-    - The apartment is located on the [5](floor) floor
-    - [9](floor)
-    - [20](floor) floor
-
-- intent: height_response
-  examples: |
-    - The building has [32](height) floors.
-    - It has [5](height) floors.
-    - [20](height) floors
-    - [5](height)
-
-- intent: rent_response
-  examples: |
-    - The montlhy rent is [350](rent) zł.
-    - The rent is [500](rent) zł.
-    - [450](rent) zł.
-    - [600](rent)
-
-- intent: construction_year_response
-  examples: |
-    - The building was built in [2019](construction_year) year.
-    - [2002](construction_year)
-    - The construction year is [2022](construction_year).
-    - It's [2001](construction_year)
-
 - intent: heating_type_response
   examples: |
     - The heating type is [gas]{"entity": "heating_type", "value": "gas"}
     - [electic]{"entity": "heating_type", "value": "electic"}
     - [tiled stove]{"entity": "heating_type", "value": "tiled stove"}
     - [urban heating]{"entity": "heating_type", "value": "urban heating"}
+    - [boiler]{"entity": "heating_type", "value": "boiler"}
+
+- intent: market_response
+  examples: |
+    - The market is [primary]{"entity": "market", "value": "primary"}
+    - The market is [secondary]{"entity": "market", "value": "secondary"}
+    - [primary]{"entity": "market", "value": "primary"}
+    - [secondary]{"entity": "market", "value": "secondary"}
+
+- intent: building_type_response
+  examples: |
+    - It is a [residential block]{"entity": "building_type", "value": "residential block"}
+    - [block of flats]{"entity": "building_type", "value": "residential block"}
+    - [apartment building]{"entity": "building_type", "value": "apartment building"}
+    - [tenement]{"entity": "building_type", "value": "tenement"}
+    - [detached house]{"entity": "building_type", "value": "detached"}
+    - [semi-detached house]{"entity": "building_type", "value": "semidetached"}
+    - [duplex]{"entity": "building_type", "value": "semidetached"}
+    - [small manor house]{"entity": "building_type", "value": "manor"}
+    - [farm]{"entity": "building_type", "value": "farm"}
+    - [row house]{"entity": "building_type", "value": "row house"}
 
 - intent: balcony_terrace_garden_response
   examples: |
@@ -178,4 +155,47 @@ nlu:
     - Wait stop
     - You're no help
     - This is no help at all
-    - How old are you
+    - How old are you?
+    - How are you?
+    - Exit
+    - Are you a chatbot?
+    - Who are you?
+  
+- intent: numerical_response
+  examples: |
+    - 50
+    - 2000
+    - 200 zł
+    - 400 zł
+    - 20zł
+    - 300 zl
+    - 200 m2
+    - 5000 m2
+    - 50m2
+    - The land has 53 m2.
+    - 84 m2
+    - 32m2
+    - The land area is 72
+    - The land has 32 m2.
+    - The land has 58 squared meters.
+    - 89 squared meters
+    - The building was built in 2019 year.
+    - The construction year is 2022.
+    - It's 2001
+    - The montlhy rent is 350 zł.
+    - The rent is 500 zł.
+    - The building has 32 floors.
+    - It has 5 floors.
+    - 20 floors
+    - The flat is on the 2 floor
+    - The apartment is located on the 5 floor
+    - The flat has 2 rooms.
+    - 1 room
+    - 3 rooms
+    - There are 5 rooms.
+    - There is only 1 room.
+    - The flat has 53 m2.
+    - The area is 72
+    - The property has 32 m2.
+    - The property has 58 squared meters.
+    - 89 squared meters

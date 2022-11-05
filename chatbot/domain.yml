@@ -1,58 +1,5 @@
 version: "2.0"
 
-# intents:
-#   - greet
-#   - goodbye
-#   - affirm
-#   - deny
-#   - pricing_request
-#   - localisation_response
-#   - area_response
-
-# responses:
-#   utter_greet:
-#   - text: "Hey! How are you?"
-
-#   utter_goodbye:
-#   - text: "Bye"
-
-#   utter_ask_localisation:
-#   - text: "Tell me what's the locatisation of your real estate?"
-
-#   utter_ask_area:
-#   - text: "What's the area of the property?"
-
-#   utter_ask_number_of_rooms:
-#   - text: "How many rooms are there?"
-
-#   utter_ask_floor:
-#   - text: "On which floor is your flat located?"
-
-# forms:
-#   pricing_form:
-#     required_slots:
-#       localisation: 
-#       - type: from_entity
-#         entity: localisation
-#         intent: localisation_response
-#       area: 
-#       - type: from_entity
-#         entity: area
-#         intent: area_response
-
-# actions:
-#   - action_print_information
-
-# slots:
-#   localisation: 
-#     type: text
-#   area:
-#     type: text
-
-# entities:
-#   - localisation
-#   - area
-
 session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true
@@ -66,15 +13,12 @@ intents:
   - localisation_response
   - house_pricing_request
   - flat_pricing_request
-  - number_of_rooms_response
-  - area_response
   - finishing_standard_response
-  - floor_response
-  - height_response
-  - rent_response
-  - construction_year_response
   - heating_type_response
   - balcony_terrace_garden_response
+  - numerical_response
+  - market_response
+  - building_type_response
 
 responses:
   utter_greet:
@@ -98,7 +42,7 @@ responses:
     - text: What is the finishing standard?
   utter_ask_floor:
     - text: On which floor is the flat located?
-  utter_ask_height:
+  utter_ask_number_of_floors:
     - text: And how many floors in total has the building?
   utter_ask_rent:
     - text: How much is the monthly rent?
@@ -124,8 +68,12 @@ responses:
     - text: Is there a basement available for residents?
   utter_ask_is_duplex:
     - text: Is it a duplex apartment?
+  utter_ask_land_area:
+    - text: What's the area of the land?
+  utter_ask_fence:
+    - text: What kind of fence is there?
   utter_finished:
-    - text: You're all set! Check your inbox at.
+    - text: Thank you for all the information! Let me estimate the price of you property.
   utter_ask_continue:
     - text: Sorry, I don't quite understand. Do you want to continue?
   utter_goodbye:
@@ -145,7 +93,7 @@ forms:
         entity: finishing_standard
     floor:
       - type: from_text
-    height:
+    number_of_floors:
       - type: from_text
     rent:
       - type: from_text
@@ -154,6 +102,12 @@ forms:
     heating_type:
       - type: from_entity
         entity: heating_type
+    market:
+      - type: from_entity
+        entity: market
+    building_type:
+      - type: from_entity
+        entity: building_type
     balcony_terrace_garden:
       - type: from_entity
         entity: balcony_terrace_garden
@@ -172,6 +126,69 @@ forms:
         intent: deny
         value: false
     is_lift:
+      - type: from_intent
+        intent: affirm
+        value: true
+      - type: from_intent
+        intent: deny
+        value: false
+    is_security:
+      - type: from_intent
+        intent: affirm
+        value: true
+      - type: from_intent
+        intent: deny
+        value: false
+    is_basement:
+      - type: from_intent
+        intent: affirm
+        value: true
+      - type: from_intent
+        intent: deny
+        value: false
+    is_duplex:
+      - type: from_intent
+        intent: affirm
+        value: true
+      - type: from_intent
+        intent: deny
+        value: false
+  house_pricing_form:
+    localisation:
+      - type: from_entity
+        entity: localisation
+    area:
+      - type: from_text
+    land_area:
+      - type: from_text
+    number_of_rooms:
+      - type: from_text
+    finishing_standard:
+      - type: from_entity
+        entity: finishing_standard
+    floor:
+      - type: from_text
+    rent:
+      - type: from_text
+    construction_year:
+      - type: from_text
+    heating_type:
+      - type: from_entity
+        entity: heating_type
+    market:
+      - type: from_entity
+        entity: market
+    building_type:
+      - type: from_entity
+        entity: building_type
+    is_parking:
+      - type: from_intent
+        intent: affirm
+        value: true
+      - type: from_intent
+        intent: deny
+        value: false
+    is_furnished:
       - type: from_intent
         intent: affirm
         value: true
@@ -220,7 +237,7 @@ slots:
   floor:
     type: float
     influence_conversation: false
-  height:
+  number_of_floors:
     type: float
     influence_conversation: false
   rent:
@@ -237,6 +254,25 @@ slots:
       - electric
       - tiled stove
       - urban heating
+      - boiler
+  market:
+    type: categorical
+    influence_conversation: false
+    values:
+      - primary
+      - secondary
+  building_type:
+    type: categorical
+    influence_conversation: false
+    values:
+      - residential block
+      - apartment building
+      - tenement
+      - detached
+      - semidetached
+      - manor
+      - farm
+      - row house
   balcony_terrace_garden:
     type: categorical
     influence_conversation: false
@@ -262,6 +298,9 @@ slots:
   is_duplex:
     type: bool
     influence_conversation: false
+  land_area:
+    type: float
+    influence_conversation: false
 
 entities:
   - localisation
@@ -269,7 +308,7 @@ entities:
   - number_of_rooms
   - finishing_standard
   - floor
-  - height
+  - number_of_floors
   - rent
   - construction_year
   - heating_type
@@ -280,7 +319,10 @@ entities:
   - is_security
   - is_basement
   - is_duplex
+  - land_area
+  - building_type
+  - market
 
 actions:
   - validate_newsletter_form
-  - submit_newsletter_form
+  - estimate_flat_price
