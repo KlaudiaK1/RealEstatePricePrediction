@@ -10,7 +10,7 @@ intents:
   - affirm
   - deny
   - goodbye
-  - localisation_response
+  - localization_response
   - house_pricing_request
   - flat_pricing_request
   - finishing_standard_response
@@ -19,6 +19,7 @@ intents:
   - numerical_response
   - market_response
   - building_type_response
+  - neighbourhood_response
 
 responses:
   utter_greet:
@@ -30,10 +31,8 @@ responses:
           payload: Could you estimate the price of my house?
         - title: flat
           payload: Could you estimate the price of my flat?
-  utter_happy:
-    - text: Great, carry on!
-  utter_ask_localisation:
-    - text: Tell me what's the locatisation of your real estate?
+  utter_ask_localization:
+    - text: Tell me what's the localization of your real estate?
   utter_ask_area:
     - text: What's the area of the property?
   utter_ask_number_of_rooms:
@@ -70,8 +69,10 @@ responses:
     - text: Is it a duplex apartment?
   utter_ask_land_area:
     - text: What's the area of the land?
-  utter_ask_fence:
-    - text: What kind of fence is there?
+  utter_ask_neighbourhood:
+    - text: What's in the neighbourhood (sea, lake, forest or moutains)? 
+  utter_ask_is_summer_house:
+    - text: Is it a summer house?  
   utter_finished:
     - text: Thank you for all the information! Let me estimate the price of you property.
   utter_ask_continue:
@@ -81,9 +82,9 @@ responses:
 
 forms:
   flat_pricing_form:
-    localisation:
+    localization:
       - type: from_entity
-        entity: localisation
+        entity: localization
     area:
       - type: from_text
     number_of_rooms:
@@ -154,9 +155,9 @@ forms:
         intent: deny
         value: false
   house_pricing_form:
-    localisation:
+    localization:
       - type: from_entity
-        entity: localisation
+        entity: localization
     area:
       - type: from_text
     land_area:
@@ -166,7 +167,7 @@ forms:
     finishing_standard:
       - type: from_entity
         entity: finishing_standard
-    floor:
+    number_of_floors:
       - type: from_text
     rent:
       - type: from_text
@@ -216,9 +217,16 @@ forms:
       - type: from_intent
         intent: deny
         value: false
+    is_summer_house:
+      - type: from_intent
+        intent: affirm
+        value: true
+      - type: from_intent
+        intent: deny
+        value: false
 
 slots:
-  localisation:
+  localization:
     type: text
     influence_conversation: false
   area:
@@ -251,7 +259,7 @@ slots:
     influence_conversation: false
     values:
       - gas
-      - electric
+      - electrical
       - tiled stove
       - urban heating
       - boiler
@@ -301,9 +309,20 @@ slots:
   land_area:
     type: float
     influence_conversation: false
+  neighbourhood:
+    type: categorical
+    influence_conversation: false
+    values:
+      - sea
+      - lake
+      - moutains
+      - forest
+  is_summer_house:
+    type: bool
+    influence_conversation: false
 
 entities:
-  - localisation
+  - localization
   - area
   - number_of_rooms
   - finishing_standard
@@ -322,7 +341,9 @@ entities:
   - land_area
   - building_type
   - market
+  - neighbourhood
+  - is_summer_house
 
 actions:
-  - validate_newsletter_form
   - estimate_flat_price
+  - estimate_house_price

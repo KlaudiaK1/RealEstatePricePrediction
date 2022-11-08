@@ -18,13 +18,13 @@ from numpy import nan
 import sys
 import pickle
 from tensorflow.keras.models import  load_model
-from xgboost import XGBClassifier
+import xgboost as xg
 import pandas as pd
 
 
-def get_address_details(localisation):
-    localisation = re.sub(r'\w*\.\w*', '', localisation).strip()
-    r = requests.get(f'https://nominatim.openstreetmap.org/search/{localisation}?format=json&addressdetails=1')
+def get_address_details(localization):
+    localization = re.sub(r'\w*\.\w*', '', localization).strip()
+    r = requests.get(f'https://nominatim.openstreetmap.org/search/{localization}?format=json&addressdetails=1')
     if(bool(r.json())):
         result = r.json()[0]
         address_details = result['address']
@@ -76,8 +76,8 @@ def get_time_to_centre(lat, lon, location):
             duration = duration_res.get('routes')[0].get('duration')  
             return duration / 60
 
-def get_additional_information(localisation):
-    dict_temp = get_address_details(localisation)
+def get_additional_information(localization):
+    dict_temp = get_address_details(localization)
     if(bool(dict_temp)):
         state = dict_temp.get('state')
 
@@ -104,9 +104,13 @@ def get_additional_information(localisation):
 
     return {'state': nan if state is None else state, 'locality': nan if locality is None else locality, 'type_of_locality': nan if type_of_locality is None else type_of_locality,'time_to_nearest_shop': nan if time_to_nearest_shop is None else time_to_nearest_shop, 'time_to_nearest_stop': nan if time_to_nearest_stop is None else time_to_nearest_stop, 'time_to_centre': nan if time_to_centre is None else time_to_centre, 'population': nan if population is None else population}
 
-def transform_data(data_type, property_type, transformer_type, data_frame):
-    transformer = joblib.load(open(f'../preprocessing/{data_type}_{transformer_type}_{property_type}.save', 'rb'))
-    data_frame[[data_type]] = transformer.transform(data_frame[[data_type]].to_numpy())
+def scale_data(data_type, property_type, data_frame):
+    scaler = joblib.load(open(f'../preprocessing/{data_type}_scaler_{property_type}.save', 'rb'))
+    data_frame[[data_type]] = scaler.transform(data_frame[[data_type]].to_numpy())
+
+def encode_data(data_type, property_type, data_frame):
+    encoder = joblib.load(open(f'../preprocessing/le_{data_type}_{property_type}.save', 'rb'))
+    data_frame[[data_type]] = encoder.transform(data_frame[[data_type]])
 
 def extract_data(data):
     if(bool(data)): 
@@ -114,27 +118,9 @@ def extract_data(data):
     return nan
 
 finishing_standard_dict = {'to renovate': 'do remontu', 'ready to move in': 'do zamieszkania', 'shell condition': 'do wykończenia'}
-heating_type_dict = {'gas': 'gazowe', 'electric': 'elektryczne', 'tiled stove': 'piece kaflowe', 'urban heating': 'miejskie', 'boiler': 'kotłownia'}
+heating_type_dict = {'gas': 'gazowe', 'electrical': 'elektryczne', 'tiled stove': 'piece kaflowe', 'urban heating': 'miejskie', 'boiler': 'kotłownia'}
 market_dict = {'primary': 'pierwotny', 'secondary': 'wtórny'}
 building_type_dict = {'residential block': 'blok', 'apartment building': 'apartamentowiec', 'tenement': 'kamienica', 'detached': 'dom wolnostojący', 'semidetached': 'bliźniak', 'manor': 'dworek/pałac', 'farm': 'gospodarstwo', 'row house': 'szeregowiec'}
-
-class ActionPrintInformation(Action):
-
-    def name(self) -> Text:
-        return "validate_newsletter_form"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
-        localisation = tracker.get_slot('localisation')
-        area = tracker.get_slot('area')
-        finishing_standard = tracker.get_slot('finishing_standard')
-
-        print(localisation)
-        print(area)
-        print(finishing_standard)
-        return []
 
 class ActionEstimateFlatPrice(Action):
     def name(self) -> Text:
@@ -144,7 +130,9 @@ class ActionEstimateFlatPrice(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
-        loaded_model = joblib.load(open('./grid_search_model.save', 'rb'))
+        xgb_model = xg.XGBRegressor(objective = 'reg:squarederror')
+
+        xgb_model.load_model('../models/xgb_flats_model.save')
 
         #categorical values
         finishing_standard = finishing_standard_dict.get(tracker.get_slot('finishing_standard'), nan)
@@ -180,8 +168,8 @@ class ActionEstimateFlatPrice(Action):
 
         print(is_parking)
 
-        localisation = tracker.get_slot('localisation')
-        additional_information = get_additional_information(localisation)
+        localization = tracker.get_slot('localization')
+        additional_information = get_additional_information(localization)
 
         print(additional_information)
 
@@ -195,20 +183,123 @@ class ActionEstimateFlatPrice(Action):
         time_to_centre = additional_information.get('time_to_centre')
 
         #creating a data frame with one row
-        data_frame = pd.DataFrame([[area, number_of_rooms, finishing_standard, floor, rent, heating_type, market, building_type, state, locality, population, type_of_locality, time_to_nearest_shop, time_to_nearest_stop, time_to_centre]], columns=['area', 'number_of_rooms', 'finishing_standard', 'floor', 'rent', 'heating', 'market', 'building_type', 'state', 'locality', 'population', 'type_of_locality', 'time_to_nearest_shop', 'time_to_nearest_stop', 'time_to_centre'])
+        data_frame = pd.DataFrame([[area, number_of_rooms, finishing_standard, floor, rent, heating_type, market, building_type, state, locality, population, type_of_locality, time_to_nearest_shop, time_to_nearest_stop, time_to_centre, has_balcony, has_garden, has_terrace, is_parking, is_furnished, is_lift, is_security, is_duplex, is_basement, number_of_floors, age]], columns=['area', 'number_of_rooms', 'finishing_standard', 'floor', 'rent', 'heating', 'market', 'building_type', 'state', 'locality', 'population', 'type_of_locality', 'time_to_nearest_shop', 'time_to_nearest_stop', 'time_to_centre', 'has_balcony', 'has_garden', 'has_terrace', 'is_parking', 'is_furnished', 'is_lift', 'is_security', 'is_duplex', 'is_basement', 'number_of_floors', 'age'])
 
         print(data_frame)
 
-        transform_data('area', 'flats', 'scaler', data_frame)
-        transform_data('rent', 'flats', 'scaler', data_frame)
+        scale_data('rent', 'flats', data_frame)       
+        scale_data('population', 'flats', data_frame)
+        scale_data('age', 'flats', data_frame)
+        scale_data('area', 'flats', data_frame)
+
+        encode_data('finishing_standard', 'flats', data_frame)
+        encode_data('heating', 'flats', data_frame)
+        encode_data('building_type', 'flats', data_frame)
+        encode_data('market', 'flats', data_frame)
+        encode_data('state', 'flats', data_frame)
+        encode_data('locality', 'flats', data_frame)
+        encode_data('type_of_locality', 'flats', data_frame)
         
         print(data_frame)
 
-        print(localisation)
+        print(localization)
         print(area)
         print(number_of_rooms)
         print(finishing_standard)
         print(floor)
         print()
-        return []
+
+        price_prediction = xgb_model.predict(data_frame)
+        dispatcher.utter_message(text=f"The estimated price of your flat is: {price_prediction[0]} zl")
+        return []        
+
+class ActionEstimateHousePrice(Action):
+    def name(self) -> Text:
+        return 'estimate_house_price'
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        xgb_model = xg.XGBRegressor(objective = 'reg:squarederror')
+
+        xgb_model.load_model('../models/xgb_houses_model.save')
+
+        #categorical values
+        finishing_standard = finishing_standard_dict.get(tracker.get_slot('finishing_standard'), nan)
+        heating_type = heating_type_dict.get(tracker.get_slot('heating_type'), nan)
+        market = market_dict.get(tracker.get_slot('market'), nan)
+        building_type = building_type_dict.get(tracker.get_slot('building_type'), nan)
+
+        #numerical values
+        area = extract_data(tracker.get_slot('area'))
+        land_area = extract_data(tracker.get_slot('land_area'))
+        number_of_rooms = extract_data(tracker.get_slot('number_of_rooms'))
+        rent = extract_data(tracker.get_slot('rent'))
+        number_of_floors = extract_data(tracker.get_slot('number_of_floors'))
+        age =  2022 - extract_data(tracker.get_slot('construction_year'))
+
+        #boolean values
+        is_sea = 0
+        is_lake = 0
+        is_moutain = 0
+        is_forest = 0
+        neighbourhood = tracker.get_slot('neighbourhood')
+        if(neighbourhood == 'sea'):
+            is_sea = 1
+        if(neighbourhood == 'lake'):
+            is_lake = 1
+        if(neighbourhood == 'moutains'):
+            is_moutain = 1
+        if(neighbourhood == 'forest'):
+            is_forest = 1
+        is_parking = int(tracker.get_slot('is_parking'))
+        is_furnished = int(tracker.get_slot('is_furnished'))
+        is_security = int(tracker.get_slot('is_security'))
+        is_duplex = int(tracker.get_slot('is_duplex'))
+        is_basement = int(tracker.get_slot('is_basement'))
+        is_summer_house = int(tracker.get_slot('is_summer_house'))
+
+        localization = tracker.get_slot('localization')
+        additional_information = get_additional_information(localization)
+
+        #additional values
+        state = additional_information.get('state')
+        locality = additional_information.get('locality')
+        population = additional_information.get('population')
+        type_of_locality = additional_information.get('type_of_locality')
+        time_to_nearest_shop = additional_information.get('time_to_nearest_shop')
+        time_to_nearest_stop = additional_information.get('time_to_nearest_stop')
+        time_to_centre = additional_information.get('time_to_centre')
+
+        #creating a data frame with one row
+        data_frame = pd.DataFrame([[area, heating_type, land_area, finishing_standard, building_type, number_of_rooms, rent, market, state, locality, population, type_of_locality, time_to_nearest_shop, time_to_nearest_stop, time_to_centre, is_lake, is_forest, is_moutain, is_sea, is_parking, is_summer_house, is_furnished, is_security, is_duplex, is_basement, age]], columns=['area', 'heating', 'land_area', 'finishing_standard', 'building_type', 'number_of_rooms', 'rent', 'market', 'state', 'locality', 'population', 'type_of_locality', 'time_to_nearest_shop', 'time_to_nearest_stop', 'time_to_centre', 'is_lake', 'is_forest', 'is_moutain', 'is_sea', 'is_parking', 'is_summer_house', 'is_furnished', 'is_security', 'is_duplex', 'is_basement', 'age'])
+
+        print(data_frame)
+
+        scale_data('rent', 'houses', data_frame)       
+        scale_data('population', 'houses', data_frame)
+        scale_data('age', 'houses', data_frame)
+        scale_data('area', 'houses', data_frame)
+        scale_data('land_area', 'houses', data_frame)
+
+        encode_data('finishing_standard', 'flats', data_frame)
+        encode_data('heating', 'flats', data_frame)
+        encode_data('building_type', 'flats', data_frame)
+        encode_data('market', 'flats', data_frame)
+        encode_data('state', 'flats', data_frame)
+        encode_data('locality', 'flats', data_frame)
+        encode_data('type_of_locality', 'flats', data_frame)
         
+        print(data_frame)
+
+        print(localization)
+        print(area)
+        print(number_of_rooms)
+        print(finishing_standard)
+        print(floor)
+        print()
+
+        price_prediction = xgb_model.predict(data_frame)
+        dispatcher.utter_message(text=f"The estimated price of your house is: ${price_prediction[0]} zl")
+        return []        

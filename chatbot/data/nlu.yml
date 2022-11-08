@@ -73,24 +73,15 @@ nlu:
     - Tell me the price of the apartment.
     - Estimate the price of my apartment.
 
-- intent: pricing_request
+- intent: localization_response
   examples: |
-    - Could you estimate the price of my real estate?
-    - Could you estimete the price of my flat?
-    - Tell me how much is my flat worth.
-    - Tell me the price of the flat.
-    - Estimate the price of my property.
-    - Tell me the price of the house.
-
-- intent: localisation_response
-  examples: |
-    - The localisation is [Warszawa, Marszałkowska 10](localisation)
-    - My flat is located on [Floriańska 11, Kraków](localisation).
-    - [Floriańska 24, Kraków](localisation)
-    - Localisation is [Grzegórzki 23, Wrocław](localisation).
-    - It is located on [Kwiatowa 4, Gdańsk](localisation).
-    - [Przemyśl](localisation)
-    - [Rzeszów](localisation)
+    - The localization is [Warszawa, Marszałkowska 10](localization)
+    - My flat is located on [Floriańska 11, Kraków](localization).
+    - [Floriańska 24, Kraków](localization)
+    - localization is [Grzegórzki 23, Wrocław](localization).
+    - It is located on [Kwiatowa 4, Gdańsk](localization).
+    - [Przemyśl](localization)
+    - [Rzeszów](localization)
 
 - intent: finishing_standard_response
   examples: |
@@ -115,7 +106,7 @@ nlu:
 - intent: heating_type_response
   examples: |
     - The heating type is [gas]{"entity": "heating_type", "value": "gas"}
-    - [electic]{"entity": "heating_type", "value": "electic"}
+    - [electrical]{"entity": "heating_type", "value": "electrical"}
     - [tiled stove]{"entity": "heating_type", "value": "tiled stove"}
     - [urban heating]{"entity": "heating_type", "value": "urban heating"}
     - [boiler]{"entity": "heating_type", "value": "boiler"}
@@ -149,6 +140,17 @@ nlu:
     - [terrace]{"entity": "balcony_terrace_garden", "value": "terrace"}
     - [garden]{"entity": "balcony_terrace_garden", "value": "garden"}
 
+- intent: neighbourhood_response
+  examples: |
+    - There is a [sea]{"entity": "neighbourhood", "value": "sea"} in the neighbourhood
+    - There is a [lake]{"entity": "neighbourhood", "value": "lake"} in the neighbourhood
+    - There are [moutains]{"entity": "neighbourhood", "value": "moutains"}
+    - There is a [forest]{"entity": "neighbourhood", "value": "forest"}
+    - [sea]{"entity": "neighbourhood", "value": "sea"}
+    - [lake]{"entity": "neighbourhood", "value": "lake"}
+    - [moutains]{"entity": "neighbourhood", "value": "moutains"}
+    - [forest]{"entity": "neighbourhood", "value": "forest"}
+
 - intent: chitchat
   examples: |
     - That's not what I want to do
@@ -160,6 +162,8 @@ nlu:
     - Exit
     - Are you a chatbot?
     - Who are you?
+    - Stop
+    - Finish
   
 - intent: numerical_response
   examples: |

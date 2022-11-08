@@ -35,5 +35,5 @@ rules:
       - action: house_pricing_form
       - active_loop: null
       - action: utter_finished
-      - action: estimate_flat_price
+      - action: estimate_house_price
       - action: action_restart

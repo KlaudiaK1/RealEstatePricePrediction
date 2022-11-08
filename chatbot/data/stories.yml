@@ -10,7 +10,7 @@ stories:
       - action: flat_pricing_form
       - active_loop: flat_pricing_form
       - slot_was_set:
-        - requested_slot: localisation
+        - requested_slot: localization
       - intent: chitchat
       - action: utter_ask_continue
       - intent: affirm
@@ -24,13 +24,12 @@ stories:
       - intent: flat_pricing_request
       - action: flat_pricing_form
       - active_loop: flat_pricing_form
-      - slot_was_set:
-        - requested_slot: localisation
       - intent: chitchat
       - action: utter_ask_continue
       - intent: deny
       - action: action_deactivate_loop
       - active_loop: null
+      - action: utter_goodbye
       - action: action_restart
 
   - story: flat pricing story
@@ -42,7 +41,7 @@ stories:
       - action: flat_pricing_form
       - active_loop: flat_pricing_form
       - slot_was_set:
-        - requested_slot: localisation
+        - requested_slot: localization
       - intent: chitchat
       - action: utter_ask_continue
       - intent: affirm
@@ -54,7 +53,7 @@ stories:
       - intent: affirm
       - action: flat_pricing_form
       - slot_was_set:
-        - requested_slot: localisation
+        - requested_slot: localization
       - slot_was_set:
         - requested_slot: area
       - slot_was_set:
@@ -103,7 +102,7 @@ stories:
       - action: house_pricing_form
       - active_loop: house_pricing_form
       - slot_was_set:
-        - requested_slot: localisation
+        - requested_slot: localization
       - intent: chitchat
       - action: utter_ask_continue
       - intent: affirm
@@ -118,7 +117,7 @@ stories:
       - action: house_pricing_form
       - active_loop: house_pricing_form
       - slot_was_set:
-        - requested_slot: localisation
+        - requested_slot: localization
       - intent: chitchat
       - action: utter_ask_continue
       - intent: deny
@@ -135,7 +134,7 @@ stories:
       - action: house_pricing_form
       - active_loop: house_pricing_form
       - slot_was_set:
-        - requested_slot: localisation
+        - requested_slot: localization
       - intent: chitchat
       - action: utter_ask_continue
       - intent: affirm
@@ -158,7 +157,7 @@ stories:
         - requested_slot: construction_year
       - active_loop: null
       - action: utter_finished
-      - action: estimate_flat_price
+      - action: estimate_house_price
       - action: action_restart
 
   - story: house pricing story 2
@@ -171,5 +170,5 @@ stories:
       - active_loop: house_pricing_form
       - active_loop: null
       - action: utter_finished
-      - action: estimate_flat_price
+      - action: estimate_house_price
       - action: action_restart
