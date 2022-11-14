@@ -58,7 +58,7 @@ responses:
   utter_ask_is_parking:
     - text: Is there a parking?
   utter_ask_is_furnished:
-    - text: Is the apartment furnished?
+    - text: Is the property furnished?
   utter_ask_is_lift:
     - text: Is there a lift?
   utter_ask_is_security:
@@ -66,15 +66,15 @@ responses:
   utter_ask_is_basement:
     - text: Is there a basement available for residents?
   utter_ask_is_duplex:
-    - text: Is it a duplex apartment?
+    - text: Is it a duplex property?
   utter_ask_land_area:
     - text: What's the area of the land?
   utter_ask_neighbourhood:
-    - text: What's in the neighbourhood (sea, lake, forest or moutains)? 
+    - text: What's in the neighborhood (sea, lake, forest, or mountains)?
   utter_ask_is_summer_house:
     - text: Is it a summer house?  
   utter_finished:
-    - text: Thank you for all the information! Let me estimate the price of you property.
+    - text: Thank you for all the information! Let me estimate the price of your property.
   utter_ask_continue:
     - text: Sorry, I don't quite understand. Do you want to continue?
   utter_goodbye:
@@ -182,6 +182,9 @@ forms:
     building_type:
       - type: from_entity
         entity: building_type
+    neighbourhood:
+      - type: from_entity
+        entity: neighbourhood
     is_parking:
       - type: from_intent
         intent: affirm

@@ -96,7 +96,6 @@ def get_additional_information(localization):
 
         latitude = dict_temp.get('latitude')
         longtitude = dict_temp.get('longtitude')
-        print(locality)
         time_to_nearest_shop = get_time_to_nearest_shop(latitude, longtitude)
         time_to_nearest_stop = get_time_to_nearest_stop(latitude, longtitude)
         time_to_centre = get_time_to_centre(latitude, longtitude, locality)
@@ -166,12 +165,8 @@ class ActionEstimateFlatPrice(Action):
         is_duplex = int(tracker.get_slot('is_duplex'))
         is_basement = int(tracker.get_slot('is_basement'))
 
-        print(is_parking)
-
-        localization = tracker.get_slot('localization')
+        localization = ' '.join(tracker.get_slot('localization'))
         additional_information = get_additional_information(localization)
-
-        print(additional_information)
 
         #additional values
         state = additional_information.get('state')
@@ -185,8 +180,6 @@ class ActionEstimateFlatPrice(Action):
         #creating a data frame with one row
         data_frame = pd.DataFrame([[area, number_of_rooms, finishing_standard, floor, rent, heating_type, market, building_type, state, locality, population, type_of_locality, time_to_nearest_shop, time_to_nearest_stop, time_to_centre, has_balcony, has_garden, has_terrace, is_parking, is_furnished, is_lift, is_security, is_duplex, is_basement, number_of_floors, age]], columns=['area', 'number_of_rooms', 'finishing_standard', 'floor', 'rent', 'heating', 'market', 'building_type', 'state', 'locality', 'population', 'type_of_locality', 'time_to_nearest_shop', 'time_to_nearest_stop', 'time_to_centre', 'has_balcony', 'has_garden', 'has_terrace', 'is_parking', 'is_furnished', 'is_lift', 'is_security', 'is_duplex', 'is_basement', 'number_of_floors', 'age'])
 
-        print(data_frame)
-
         scale_data('rent', 'flats', data_frame)       
         scale_data('population', 'flats', data_frame)
         scale_data('age', 'flats', data_frame)
@@ -199,18 +192,9 @@ class ActionEstimateFlatPrice(Action):
         encode_data('state', 'flats', data_frame)
         encode_data('locality', 'flats', data_frame)
         encode_data('type_of_locality', 'flats', data_frame)
-        
-        print(data_frame)
-
-        print(localization)
-        print(area)
-        print(number_of_rooms)
-        print(finishing_standard)
-        print(floor)
-        print()
 
         price_prediction = xgb_model.predict(data_frame)
-        dispatcher.utter_message(text=f"The estimated price of your flat is: {price_prediction[0]} zl")
+        dispatcher.utter_message(text=f"The estimated price of your flat is {price_prediction[0]:.2f} zł")
         return []        
 
 class ActionEstimateHousePrice(Action):
@@ -260,7 +244,8 @@ class ActionEstimateHousePrice(Action):
         is_basement = int(tracker.get_slot('is_basement'))
         is_summer_house = int(tracker.get_slot('is_summer_house'))
 
-        localization = tracker.get_slot('localization')
+        localization = ' '.join(tracker.get_slot('localization'))
+        print(localization)
         additional_information = get_additional_information(localization)
 
         #additional values
@@ -275,8 +260,6 @@ class ActionEstimateHousePrice(Action):
         #creating a data frame with one row
         data_frame = pd.DataFrame([[area, heating_type, land_area, finishing_standard, building_type, number_of_rooms, rent, market, state, locality, population, type_of_locality, time_to_nearest_shop, time_to_nearest_stop, time_to_centre, is_lake, is_forest, is_moutain, is_sea, is_parking, is_summer_house, is_furnished, is_security, is_duplex, is_basement, age]], columns=['area', 'heating', 'land_area', 'finishing_standard', 'building_type', 'number_of_rooms', 'rent', 'market', 'state', 'locality', 'population', 'type_of_locality', 'time_to_nearest_shop', 'time_to_nearest_stop', 'time_to_centre', 'is_lake', 'is_forest', 'is_moutain', 'is_sea', 'is_parking', 'is_summer_house', 'is_furnished', 'is_security', 'is_duplex', 'is_basement', 'age'])
 
-        print(data_frame)
-
         scale_data('rent', 'houses', data_frame)       
         scale_data('population', 'houses', data_frame)
         scale_data('age', 'houses', data_frame)
@@ -290,16 +273,7 @@ class ActionEstimateHousePrice(Action):
         encode_data('state', 'flats', data_frame)
         encode_data('locality', 'flats', data_frame)
         encode_data('type_of_locality', 'flats', data_frame)
-        
-        print(data_frame)
-
-        print(localization)
-        print(area)
-        print(number_of_rooms)
-        print(finishing_standard)
-        print(floor)
-        print()
 
         price_prediction = xgb_model.predict(data_frame)
-        dispatcher.utter_message(text=f"The estimated price of your house is: ${price_prediction[0]} zl")
+        dispatcher.utter_message(text=f"The estimated price of your house is ${price_prediction[0]:.2f} zł")
         return []        
