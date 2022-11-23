@@ -15,8 +15,7 @@ The chatbot asks a user about features of the property such as localization, are
 [![Pandas][Pandas]][Pandas-url]
 [![Tensorflow][Tensorflow]][Tensorflow-url]
 [![Scikit-learn][Scikit-learn]][Scikit-learn-url]
-
-
+[![Rasa][Rasa]][Rasa-url]
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
@@ -32,3 +31,39 @@ The chatbot asks a user about features of the property such as localization, are
 [Tensorflow-url]: https://www.tensorflow.org/
 [Scikit-learn]: https://img.shields.io/badge/scikit--learn-%23F7931E.svg?style=for-the-badge&logo=scikit-learn&logoColor=white
 [Scikit-learn-url]: https://scikit-learn.org/
+[Rasa]: https://img.shields.io/badge/rasa-7D4698?style=for-the-badge&logo=rasa&logoColor=white
+[Rasa-url]: https://rasa.com/
+
+<!-- GETTING STARTED -->
+## Getting Started
+
+To get a local copy up and running follow these simple steps.
+
+### Prerequisites
+
+This is a list of software that should be installed before running the project.
+* Rasa: 2.8.2
+* Rasa SDK: 2.8.1
+* Rasa X: 0.39.3
+* Python: 3.8.15
+
+### Set up
+
+To run the project, execute the following commands:
+
+1. Clone the repo
+   ```sh
+   git clone https://github.com/KlaudiaK1/RealEstatePricePrediction.git
+   ```
+2. Run the Rasa actions
+   ``sh
+   rasa run actions
+   ```
+4. Train the Rasa models
+   ```sh
+   rasa train
+   ```
+3. Run the instance of the chatbot in the browser
+   ```sh
+   rasa x
+   ```
