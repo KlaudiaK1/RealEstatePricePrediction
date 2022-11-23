@@ -11,6 +11,11 @@ The chatbot asks a user about features of the property such as localization, are
 
 [![Python][Python]][Python-url]
 [![Jupyter][Jupyter]][Jupyter-url]
+[![Numpy][Numpy]][Numpy-url]
+[![Pandas][Pandas]][Pandas-url]
+[![Tensorflow][Tensorflow]][Tensorflow-url]
+[![Scikit-learn][Scikit-learn]][Scikit-learn-url]
+
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
@@ -19,3 +24,11 @@ The chatbot asks a user about features of the property such as localization, are
 [Python-url]: https://www.python.org/
 [Jupyter]: https://img.shields.io/badge/jupyter-%23FA0F00.svg?style=for-the-badge&logo=jupyter&logoColor=white
 [Jupyter-url]: https://jupyter.org/
+[Numpy]: https://img.shields.io/badge/numpy-%23013243.svg?style=for-the-badge&logo=numpy&logoColor=white
+[Numpy-url]: https://numpy.org/
+[Pandas]: https://img.shields.io/badge/pandas-%23150458.svg?style=for-the-badge&logo=pandas&logoColor=white
+[Pandas-url]: https://pandas.pydata.org/
+[Tensorflow]: https://img.shields.io/badge/TensorFlow-%23FF6F00.svg?style=for-the-badge&logo=TensorFlow&logoColor=white
+[Tensorflow-url]: https://www.tensorflow.org/
+[Scikit-learn]: https://img.shields.io/badge/scikit--learn-%23F7931E.svg?style=for-the-badge&logo=scikit-learn&logoColor=white
+[Scikit-learn-url]: https://scikit-learn.org/
