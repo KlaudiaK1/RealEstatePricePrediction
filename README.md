@@ -7,6 +7,8 @@ The aim of this project was to create a chatbot that estimates real estate price
 
 The chatbot asks a user about features of the property such as localization, area, number of rooms, floor, or parking availability. Based on the address, the program gathers further information on the city's population, travel time to the city center, the nearest store, and the nearest bus or tram stop from open source APIs. Then the enriched data is submitted to the trained model to obtain an estimated price of the real estate, which the chatbot returns to the user.
 
+The project consists of four main folders. The `web-scraping` directory contains the implementation of the web scraping service, which collects data from the [otodom][otodom-url] webpage using the `BeautifulSoup` and `Selenium` libraries. In the `preprocessing` folder, there are two Jupyter notebooks (one for the apartment advertisement dataset and one for the houses advertisement dataset), which aim is to preprocess the scrapped data by handling missing values, removing outliers, normalizing and categorical encoding. The `models` directory includes implementation and evaluation of machine learning models: linear regression, XGBoost and neural networks. Finally, the `chatbot` catalogue considers creating a chatbot with the help of the Rasa framework.
+
 ### Built With
 
 [![Python][Python]][Python-url]
@@ -33,6 +35,7 @@ The chatbot asks a user about features of the property such as localization, are
 [Scikit-learn-url]: https://scikit-learn.org/
 [Rasa]: https://img.shields.io/badge/rasa-7D4698?style=for-the-badge&logo=rasa&logoColor=white
 [Rasa-url]: https://rasa.com/
+[otodom-url]: https://otodom.pl/
 
 <!-- GETTING STARTED -->
 ## Getting Started
@@ -56,7 +59,7 @@ To run the project, execute the following commands:
    git clone https://github.com/KlaudiaK1/RealEstatePricePrediction.git
    ```
 2. Run the Rasa actions
-   ``sh
+   ```sh
    rasa run actions
    ```
 4. Train the Rasa models
