@@ -194,7 +194,7 @@ class ActionEstimateFlatPrice(Action):
         encode_data('type_of_locality', 'flats', data_frame)
 
         price_prediction = xgb_model.predict(data_frame)
-        dispatcher.utter_message(text=f"The estimated price of your flat is {price_prediction[0]:.2f} zł")
+        dispatcher.utter_message(text=f"The estimated price of your flat is {int(round(price_prediction[0], -3))} zł")
         return []        
 
 class ActionEstimateHousePrice(Action):
@@ -275,5 +275,5 @@ class ActionEstimateHousePrice(Action):
         encode_data('type_of_locality', 'flats', data_frame)
 
         price_prediction = xgb_model.predict(data_frame)
-        dispatcher.utter_message(text=f"The estimated price of your house is ${price_prediction[0]:.2f} zł")
+        dispatcher.utter_message(text=f"The estimated price of your house is ${int(round(price_prediction[0], -3))} zł")
         return []        
